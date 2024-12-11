@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maple's Kitchen</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Gaegu&family=Karla:ital,wght@0,200..800;1,200..800&family=Space+Grotesk:wght@300..700&family=Yuji+Syuku&display=swap" rel="stylesheet">  
+    <style>
+        body {
+            font-family: Karla, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fff7e6;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #ffcb85;
+            padding: 10px 20px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        .logo img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+        .logo span {
+            font-size: 24px;
+            font-weight: bold;
+            color: #5c3d2e;
+        }
+        .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #5c3d2e;
+            padding: 8px 15px;
+            border-radius: 5px;
+            background-color: #ffd9b3;
+        }
+        .nav-links a:hover {
+            background-color: #f7b067;
+        }
+        .search-bar input {
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 200px;
+            margin-right: 50px;
+        }
+        .section {
+            padding: 80px 20px 40px;
+        }
+        .section h2 {
+            color: #5c3d2e;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .recipes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .recipe {
+            display: flex;
+            gap: 15px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fff;
+            align-items: center;
+            cursor: pointer;
+        }
+        .recipe:hover img {
+            transform: scale(1.1);
+            transition: transform 0.3s ease;
+        }
+        .recipe img {
+            width: 300px;
+            height: 300px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+        .recipe h3 {
+            color: #5c3d2e;
+            margin: 0;
+        }
+        .recipe-description {
+            margin-top: 10px;
+            color: #5c3d2e;
+            font-size: 14px;
+        }
+        .submit-recipe {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #ffcb85;
+            color: #5c3d2e;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .submit-recipe:hover {
+            background-color: #f7b067;
+        }
+        .modal-bg {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 1100;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            width: 90%;
+            display: flex;
+            gap: 20px;
+        }
+        .modal img {
+            width: 300px;
+            height: 300px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+        .modal-content {
+            flex: 1;
+        }
+        .modal h3 {
+            color: #5c3d2e;
+        }
+        .modal table {
+            width: 100%;
+            margin-top: 15px;
+            border-collapse: collapse;
+        }
+        .modal table, .modal th, .modal td {
+            border: 1px solid #ddd;
+        }
+        .modal th, .modal td {
+            padding: 8px;
+            text-align: left;
+        }
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 24px;
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            padding: 5px;
+        }
+        .modal textarea {
+            width: 100%;
+            height: 100px;
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+            resize: none;
+            margin-right: 20px;
+        }
+        .submit-recipe-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1200;
+        }
+        .submit-recipe-modal {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            width: 400px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .submit-recipe-modal input,
+        .submit-recipe-modal textarea {
+            width: 90%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .submit-recipe-modal button {
+            background-color: #ffcb85;
+            color: #5c3d2e;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .submit-recipe-modal button:hover {
+            background-color: #f7b067;
+        }
+        .submit-recipe-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #ffffff;
+        }
+        textarea#stepsList {
+            width: 90%;
+            height: 250px;
+            resize: vertical;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <img src="logo.png" alt="skibidi logo">
+            <span>Maple's Kitchen</span>
+        </div>
+        <div class="nav-links">
+            <a href="#breakfast">Breakfast</a>
+            <a href="#lunch">Lunch</a>
+            <a href="#dinner">Dinner</a>
+            <a href="#dessert">Dessert</a>
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="Search recipes...">
+        </div>
+    </nav>
+
+    <div class="section" id="breakfast">
+        <h2>Breakfast Recipes</h2>
+        <div class="recipes">
+            <div class="recipe" onclick="openModal('Pancakes', 'https://i.pinimg.com/736x/45/f6/82/45f682a39ab96962f8d6ec897495e51f.jpg', '2 cup flour, 1 large egg, 1/4 sweetner, 4 tsp. baking powder, 1/4 tps. baking soda, 1/2 tsp. salt, 1 3/4 cups milk, 1/4 cup butter, 2 tsp. vanilla extract', '1. In a large bowl, whisk together flour, sugar (or sweetener), baking powder, baking soda, and salt. || 2.  In a separate bowl, whisk together milk, slightly cooled melted butter, vanilla extract, and egg. || 3. Gradually pour the wet ingredients into the dry ingredients, whisking continuously until a smooth batter forms. || 4.  If the batter is too thick, add a tablespoon or two of milk at a time until it pours easily. Let the batter rest while you prepare the cooking surface. || 5. Heat a lightly greased nonstick pan or griddle over low-medium heat. Pour ¼ cup of batter onto the pan and spread it into a circle. || 6. Cook until the underside is golden brown and bubbles appear on the surface. Flip and cook until the other side is golden brown. || 7. Serve with your favorite toppings and enjoy!')">
+                <img src="https://i.pinimg.com/736x/45/f6/82/45f682a39ab96962f8d6ec897495e51f.jpg" alt="Pancakes">
+                <h3>Pancakes</h3>
+                <p class="recipe-description">Fluffy and light pancakes perfect for breakfast.</p>
+            </div>
+            <div class="recipe" onclick="openModal('Omelette', 'https://i.pinimg.com/736x/dc/d5/fa/dcd5fa28191ceae9d540c274fa6baf4b.jpg', '1 large egg, 1 tsp. double cream, 1 tsp. sunflower oil', '1. Beat the egg and cream until properly mixed, then use salt and pepper to season to your liking. || 2. Heat oil in a small non-stick frying pan / omelette pan in medium heat. Proceed to pour in the egg and wait for the bottom to set. || 3. Work quickly and use 2 chopsticks to hold steady in the middle of your omelette then use the pan handle to turn the pan with your other hand. This will form the omelettes tornado shape. || 4. Season to your liking, if needed then serve and enjoy!')">
+                <img src="https://i.pinimg.com/736x/dc/d5/fa/dcd5fa28191ceae9d540c274fa6baf4b.jpg" alt="Omelette">
+                <h3>Omelette</h3>
+                <p class="recipe-description">A simple and delicious omelette to start your day.</p>
+            </div>
+            <div class="recipe" onclick="openModal('Smoothie', 'https://i.pinimg.com/736x/ac/b4/b1/acb4b1019c0cf328304ca83bfa1d2400.jpg', '1 greek yogurt, 1 cup milk, 1 banana cut in chunks, any fruit (strawberries, blueberries, etc.)', '1. Add your liquid ingredients into a blender. || 2. Next, add the yogurt to your ingredients in the blender. || 3. Add fruits. You may freeze the fruits beforehand to make the smoothie thicker and colder. || 4. Blend your mixture. You may add ice into the mixture before blending but it isnt required. || 5. Add whipped cream, chocolate, and fruit to your smoothie, and voila, enjoy!')">
+                <img src="https://i.pinimg.com/736x/ac/b4/b1/acb4b1019c0cf328304ca83bfa1d2400.jpg" alt="Smoothie">
+                <h3>Smoothie</h3>
+                <p class="recipe-description">A refreshing smoothie to boost your energy.</p>
+              </div>
+        </div>
+    </div>
+
+    <div class="section" id="lunch">
+        <h2>Lunch Recipes</h2>
+        <div class="recipes">
+            <div class="recipe" onclick="openModal('Sandwich', 'https://i.pinimg.com/736x/f5/8e/bb/f58ebb11cb22d8eecb9ab85ee1bb7cea.jpg', 'Bread, Cheese, Lettuce', '1. You may use a shaped cutter or cut the bread yourself to achieve a pretty piece of bread. || 2. Layer the ingredients to your liking. || 3. Serve and enjoy!')">
+                <img src="https://i.pinimg.com/736x/f5/8e/bb/f58ebb11cb22d8eecb9ab85ee1bb7cea.jpg" alt="Sandwich">
+                <h3>Sandwich</h3>
+                <p class="recipe-description">A quick and easy sandwich for lunch.</p>
+            </div>
+            <div class="recipe" onclick="openModal('Soup', 'https://i.pinimg.com/736x/4d/39/11/4d391177accbe2ca16bb3804fde0eeb2.jpg', 'Vegetables, Tomatoes and tomato paste, Garlic, fennel seeds, bay leaves, red pepper flakes, broth, apple cider vinegar or lemon juice', '1. Start by sautéing onions, carrots, and celery in olive oil with tomato paste. Add garlic, fennel seeds, salt, and pepper for extra flavor. || 2. Pour in your choice of broth (vegetable or chicken). Then, add canned tomatoes, potatoes, cabbage, and bay leaves (or your preferred vegetables). || 3. Simmer the soup until the vegetables are tender, about 20 minutes. Add frozen peas and cook briefly to heat them through. || 4. Before serving, adjust the seasoning with salt and pepper. For a tangy touch, add a dash of apple cider vinegar or fresh lemon juice.')">
+                <img src="https://i.pinimg.com/736x/4d/39/11/4d391177accbe2ca16bb3804fde0eeb2.jpg" alt="Soup">
+                <h3>Soup</h3>
+                <p class="recipe-description">Warm and comforting vegetable soup.</p>
+            </div>
+            <div class="recipe" onclick="openModal('Fruit Salad', 'https://i.pinimg.com/736x/09/bd/df/09bddf9ca3615baa0e4367850f64068f.jpg', 'Fruits of your choice', '1. You may use shaped cutter to turn you fruit into different shapes fpr the aesthetic. || 2. You may toss them in a bowl to mix it better or line them up in the bowl. || 3. Add any other ingredient if you wish, serve and enjoy!')">
+                <img src="https://i.pinimg.com/736x/09/bd/df/09bddf9ca3615baa0e4367850f64068f.jpg" alt="Fruit Salad">
+                <h3>Fruit Salad</h3>
+                <p class="recipe-description">A fresh fruit salad with a sweet taste.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="section" id="dinner">
+        <h2>Dinner Recipes</h2>
+        <div class="recipes">
+            <div class="recipe" onclick="openModal('Steak', 'https://i.pinimg.com/736x/0a/fd/a8/0afda87c38302cbba26e4b3f3d1afacd.jpg', 'Beef steak, Salt, Pepper, Optional: Potatoes (mashed)', '1. Heat olive oil and butter in a cast iron skillet over medium-high heat. Add diced potatoes, garlic, rosemary, oregano, salt, and pepper. Cook undisturbed for a few minutes, then stir and cook until tender. Remove potatoes and set aside. || 2. Increase heat to high. Melt butter in the skillet. Add steak bites and cook for a short time, flipping or stirring occasionally. Remove skillet from heat. || 3. Combine cooked potatoes and steak in the skillet. Season with additional salt and pepper to taste. || 4. Serve with your preferred side/s and enjoy!')">
+                <img src="https://i.pinimg.com/736x/0a/fd/a8/0afda87c38302cbba26e4b3f3d1afacd.jpg" alt="Steak">
+                <h3>Steak</h3>
+                <p class="recipe-description">A perfectly grilled steak with minimal seasoning.</p>
+            </div>
+            <div class="recipe" onclick="openModal('Chicken', 'https://i.pinimg.com/736x/f9/95/73/f995739d0a3a1563daada20dfa19679a.jpg', 'Chicken, Seasonings, Aromatics, Butter, Egg, Cornstarch, Water, Honey, Apple Cider Vinegar, Chicken broth, White wine, Thyme, Butter', '1. Preheat oven to 400 degrees and place rack in center. Mix salt, pepper, and paprika; divide in half. Whisk half with melted butter and half with egg. Pat chicken dry, stuff with onion, lemon, garlic, and herbs. Rub spice/butter mixture under skin and pour remaining mixture over outside. Truss the chicken. || 2.  Whisk cornstarch with water in a small bowl. Combine honey and vinegar in a saucepan; simmer until reduced. Whisk in cornstarch mixture, return to simmer, and cook for 1 minute. || 3. Place chicken on a V-rack in a roasting pan. Roast until golden, about 35 minutes. Remove pan, pour broth and wine over chicken, and brush with glaze. Return to oven and roast until glaze is golden brown and thigh meat reaches 165-170 degrees, about 30 more minutes. Let chicken rest for 15 minutes. || 4. Pour pan juices into a saucepan and skim fat. Stir in thyme and simmer until slightly thickened, about 15 minutes, adding cornstarch and water if needed. Remove from heat, whisk in butter and vinegar, and season. || 5. Carve chicken and brush with remaining glaze. Serve with pan sauce and enjoy!')">
+                <img src="https://i.pinimg.com/736x/f9/95/73/f995739d0a3a1563daada20dfa19679a.jpg" alt="Honey Roast Chicken">
+                <h3>Roast Chicken</h3>
+                <p class="recipe-description">Delicious roasted chicken with garlic and herbs.</p>
+            </div>
+            <div class="recipe" onclick="openModal('Pasta', 'https://i.pinimg.com/736x/ad/b0/3c/adb03cfaa05e76b1ff67e01887f8e604.jpg', 'Pasta, Tomato sauce, Parmesan cheese, Garlic, Salt', '1. Blanch tomatoes in boiling water, then peel the skin off. Cut the peeled tomatoes into small pieces. || 2. Cook pasta in boiling salted water until al dente. || 3. Heat olive oil in a skillet and sauté garlic until softened. Stir in tomato paste, then add the diced tomatoes, salt, and pepper. Simmer the sauce until the pasta is cooked. Add basil towards the end. || 4. Drain the cooked pasta (do not rinse). Toss pasta with a bit of olive oil. Mix the pasta into the tomato sauce. || 5. Keep pasta warm for 10 minutes before serving. Garnish with Parmesan cheese and enjoy!')">
+                <img src="https://i.pinimg.com/736x/ad/b0/3c/adb03cfaa05e76b1ff67e01887f8e604.jpg" alt="Pasta">
+                <h3>Pasta</h3>
+                <p class="recipe-description">Simple and flavorful pasta with tomato sauce.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="section" id="dessert">
+        <h2>Dessert Recipes</h2>
+        <div class="recipes">
+            <div class="recipe" onclick="openModal('Cake', 'https://i.pinimg.com/736x/34/6b/00/346b000bd5ca3095110577bbf6b91c8e.jpg', 'White sugar, Butter, Strawberry flavored Jell-O, 4 large eggs, Cake flour, Baking powder, Milk (room temp.), Strawberry puree from frozen sweetened strawberries, Vanilla extract', '1. In a bowl, cream together sugar, butter, and strawberry gelatin until light and fluffy. Add eggs one by one, mixing well each time. || 2. Combine flour and baking powder, then gradually add them to the batter, alternating with milk. Stir in strawberry puree and vanilla extract. || 3. Divide the batter evenly between the two prepared pans. Bake for 25-30 minutes, or until a toothpick inserted into the center comes out clean. || 4. Let the cakes cool slightly in the pans, then invert them onto a rack to cool completely. || 5. After cooling, cover with whipped cream and add strawberry mixture. Serve and enjoy!')">
+                <img src="https://i.pinimg.com/736x/34/6b/00/346b000bd5ca3095110577bbf6b91c8e.jpg" alt="Cake">
+                <h3>Cake</h3>
+                <p class="recipe-description">A soft and moist cake for dessert.</p>
+            </div>
+            <div class="recipe" onclick="openModal('Cookies', 'https://i.pinimg.com/736x/e3/c6/5c/e3c65ce3bd0655660c30b01585f6b6b1.jpg', 'Butter, Sugar, Egg, Vanilla, Almond extract, Flour, Salt, Strawberry jelly', '1. Cream softened butter until light and fluffy. Gradually add sugar while beating. Beat in egg, vanilla, and almond extract. Gradually add flour and salt, mixing until just combined. || 2. Roll 2 teaspoons of dough into a ball. Use a floured pinky finger to create a heart shape. Add ½ teaspoon of jelly to each side of the heart. || 3. Chill the cookies in the fridge for 1 hour. Preheat oven to 350°F. Bake for 12 minutes, or until edges are lightly golden. Let the cookies cool completely on the baking sheet.')">
+                <img src="https://i.pinimg.com/736x/e3/c6/5c/e3c65ce3bd0655660c30b01585f6b6b1.jpg" alt="Cookies">
+                <h3>Cookies</h3>
+                <p class="recipe-description">Delicious homemade cookies for everyone.</p>
+            </div>
+            <div class="recipe" onclick="openModal('Pie', 'https://i.pinimg.com/736x/a9/87/4e/a9874e5594f1bae74f91b1815aa8aede.jpg', 'Apples, Spices, Lemon, Sugar, Flour', '1. Combine apple slices, sugar, flour, lemon juice, and spices in a bowl. (Optional) Cook the apple mixture in a skillet over medium-low heat for a few minutes to soften the apples. || 2. Roll out one crust and place it in a pie dish. Fill the crust with the apple mixture. Roll out the second crust and cut it into strips. Weave the strips over the filling to create a lattice top. Trim excess dough, crimp the edges, and brush with egg wash. Sprinkle with sugar (optional). || 3. Bake at 400°F for 25 minutes. Reduce heat to 375°F and use a pie crust shield to protect the edges. Continue baking until the filling is bubbly and the internal temperature reaches 200°F (about 35-40 minutes more). If necessary, tent the pie with foil to prevent overbrowning.|| 4. Let the pie cool completely on a rack before slicing. Serve and enjoy!')">
+                <img src="https://i.pinimg.com/736x/a9/87/4e/a9874e5594f1bae74f91b1815aa8aede.jpg" alt="Pie">
+                <h3>Pie</h3>
+                <p class="recipe-description">A classic apple pie dessert.</p>
+            </div>
+        </div>
+    </div>
+
+    <button class="submit-recipe" onclick="openSubmitRecipe()">Submit a Recipe</button>
+
+    <div class="submit-recipe-popup" id="submitRecipePopup">
+        <div class="submit-recipe-modal">
+            <span class="submit-recipe-close" onclick="closeSubmitRecipe()">X</span>
+            <h3>Submit a Recipe</h3>
+            <input type="text" placeholder="Recipe Title" id="submitTitle">
+            <textarea placeholder="Ingredients" id="submitIngredients"></textarea>
+            <textarea placeholder="Preparation Steps" id="submitSteps"></textarea>
+            <button onclick="submitRecipe()">Submit</button>
+        </div>
+    </div>
+
+    <div class="modal-bg" id="recipeModal">
+        <div class="modal">
+            <img src="" alt="Recipe Image" id="recipeImage">
+            <div class="modal-content">
+                <h3 id="recipeTitle"></h3>
+                <h4>Ingredients</h4>
+                <table>
+                    <tr><th>Ingredients</th></tr>
+                    <tr><td id="ingredientsList"></td></tr>
+                </table>
+                <h4>Preparation</h4>
+                <textarea id="stepsList" readonly></textarea>
+            </div>
+            <span class="modal-close" onclick="closeModal()">X</span>
+        </div>
+    </div>
+
+    <script>
+        function openModal(title, image, ingredients, steps) {
+            document.getElementById("recipeTitle").innerText = title;
+            document.getElementById("recipeImage").src = image;
+            document.getElementById("ingredientsList").innerText = ingredients;
+            document.getElementById("stepsList").value = steps;
+            document.getElementById("recipeModal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("recipeModal").style.display = "none";
+        }
+
+        function openSubmitRecipe() {
+            document.getElementById("submitRecipePopup").style.display = "flex";
+        }
+
+        function closeSubmitRecipe() {
+            document.getElementById("submitRecipePopup").style.display = "none";
+        }
+
+        function submitRecipe() {
+            const title = document.getElementById("submitTitle").value;
+            const ingredients = document.getElementById("submitIngredients").value;
+            const steps = document.getElementById("submitSteps").value;
+
+            if (title && ingredients && steps) {
+                alert("Recipe submitted!");
+                closeSubmitRecipe();
+            } else {
+                alert("Oops! You missed a spot.");
+            }
+        }
+    </script>
+</body>
+</html>

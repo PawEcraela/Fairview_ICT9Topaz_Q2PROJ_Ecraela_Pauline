@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Maple's Kitchen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #ffcb85, #ffd9b3, #fff7e6);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            width: 350px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .login-container img {
+            width: 80px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .login-container input[type="text"],
+        .login-container input[type="password"] {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .login-container button {
+            width: 95%;
+            padding: 10px;
+            margin-top: 15px;
+            font-size: 16px;
+            background-color: #ffcb85;
+            color: #5c3d2e;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .login-container button:hover {
+            background-color: #f7b067;
+        }
+
+        .login-container p {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #777;
+        }
+
+        .login-container p a {
+            color: #5c3d2e;
+            text-decoration: none;
+        }
+
+        .login-container p a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <script>
+        function redirectToShop(event) {
+            event.preventDefault();
+            window.location.href = "shop.html";
+        }
+    </script>
+</head>
+<body>
+    <div class="login-container">
+        <img src="logo.png" alt="Logo">
+        <form onsubmit="redirectToShop(event)">
+            <input type="text" placeholder="Username" required>
+            <input type="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+        <p>Don't have an account? <a href="#">Sign up here</a></p>
+    </div>
+</body>
+</html>
